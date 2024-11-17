@@ -1,2 +1,2 @@
 # ispeed
-https://ispeed.w3spaces-preview.com/index.html
+https://ispeed.w3spaces.com/index.html
