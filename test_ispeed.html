@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Internet Speed Test</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #000000;
+      color: #333;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+    }
+  
+    h1 {
+      color: #0026ff;
+      text-shadow: white 2px 2px;
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+  
+    button {
+      background-color: transparent;
+      color: white;
+      border: 1px solid blue;
+      border-radius: 8px;
+      padding: 15px 30px;
+      font-size: 1.2em;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+  
+    button:hover {
+      background-color: blue;
+      color: white;
+      transform: scale(1.05);
+    }
+  
+    button:active {
+      background-color: #388e3c;
+      transform: scale(1);
+    }
+  
+    #status {
+      font-size: 1.2em;
+      margin-top: 15px;
+      color: #b3b3b3ba;
+    }
+  
+    #speedResult {
+      font-size: 2em;
+      color: #ececec;
+      margin-top: 20px;
+    }
+  
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #ffffff;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+  </style>
+  
+</head>
+<body>
+  <h1>Internet Speed Test</h1>
+  <button id="testSpeedBtn">Start Speed Test</button>
+  <p id="status"></p>
+  <p id="speedResult"></p>
+  <script>
+    const testSpeedBtn = document.getElementById("testSpeedBtn");
+    const status = document.getElementById("status");
+    const speedResult = document.getElementById("speedResult");
+  
+    async function testInternetSpeed() {
+      const testUrl = "https://jsonplaceholder.typicode.com/photos"; // Small JSON data for testing
+      const estimatedSizeInBytes = 500 * 1024; // Approximate size of fetched data (500 KB)
+  
+      speedResult.innerHTML = ""; // Clear previous results
+      status.textContent = "Testing... Please wait.";
+  
+      const startTime = performance.now();
+      try {
+        const response = await fetch(`${testUrl}?cacheBuster=${Math.random()}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch test data.");
+        }
+        await response.json();
+        const endTime = performance.now();
+  
+        const durationInSeconds = (endTime - startTime) / 1000;
+        const speedMbps = ((estimatedSizeInBytes * 8) / (1024 * 1024)) / durationInSeconds;
+        const speedKBps = (estimatedSizeInBytes / 1024) / durationInSeconds;
+        const estimatedDownloadTime = (1 * 1024 * 1024 * 1024) / (speedMbps * 1024 * 1024); // Time for 1GB in seconds
+  
+        // Display results
+        status.textContent = "Test complete!";
+        speedResult.innerHTML = `
+          <p><strong><span style="color:red;">D</span>ownload Speed:</strong> <span style="color:red;">${speedMbps.toFixed(2)} MBps</span></p>
+          <p><strong><span style="color:blue;">S</span>peed in KBps:</strong> <span style="color:blue;">${speedKBps.toFixed(2)} KBps</span></p>
+          <p><strong><span style="color:yellow;">T</span>est Duration:</strong> <span style="color:yellow">${durationInSeconds.toFixed(2)} seconds</span></p>
+          <p><strong><span style="color:orange;">E</span>stimated Time to Download 1GB:</strong> <span style="color:orange">${estimatedDownloadTime.toFixed(2)} seconds</span></p>
+        `;
+      } catch (error) {
+        status.textContent = "An error occurred during the test. Please try again.";
+        console.error("Error:", error.message);
+      }
+    }
+  
+    testSpeedBtn.addEventListener("click", testInternetSpeed);
+  </script>
+  
+
+  <footer style="
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 10px 0;
+  background-color: transparent;
+  color: #ff0000;
+  font-size: 0.9em;
+">
+  &copy; All rights reserved - @Youb Peter 2024
+</footer>
+  
+</body>
+</html>
